@@ -1,0 +1,14 @@
+@font-face {
+    font-family:'iconfont';
+    src:url(./font/iconfont.eot) format("eot"),
+        url(./font/iconfont.ttf) format("ttf"),
+        url(./font/iconfont.woff) format("woff");
+    font-weight:600;
+    font-style:normal;
+}
+
+
+*{
+    color:red;
+    font-family:'iconfont';
+}
