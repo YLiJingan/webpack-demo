@@ -1,6 +1,10 @@
-export default function printMe() {
-    console.log('I get called from print.js!');
-  }
+
+export default () => {
+  console.log('Button Clicked: Here\'s "some text"!');
+}
+
+
+
 
 
   

@@ -2,18 +2,44 @@ import './style.css'
 import Icon from './npmGInstall.png'
 import Data from './data.xml'
 import printMe from './print.js'
-
-document.getElementById('title').innerHTML='Hello Webpack';
-
-
-let myIcon = new Image();
-myIcon.src = Icon;
-document.getElementById('title').appendChild(myIcon);
+import _ from 'lodash';
 
 
-console.log(Data);
+  function component() {
+    var element = document.createElement('div');
+    element.innerHTML = _.join(['Hello', 'webpack'], ' ');
 
-let btn = document.createElement('button');
-btn.innerHTML = 'Click me and check the console!';
-btn.onclick = printMe;
-document.getElementById('title').appendChild(btn);
+    // let element = document.createElement('pre');
+    // element.innerHTML = [
+    //     'HeLLO Webpack!',
+    //     '5 cubed is equal to ' + math.cube(5)
+    // ].join('\n\n');
+    
+    let myIcon = new Image();
+    myIcon.src = Icon;
+    element.appendChild(myIcon);
+
+    console.log(Data);
+
+    
+    let btn = document.createElement('button');
+    btn.innerHTML = 'Click me and check the console!';
+    btn.onclick = printMe;
+    element.appendChild(btn);
+
+    btn.onclick = e => import(/* webpackChunkName: "print" */ './print').then(module => {
+    var print = module.default;
+            print();
+     });
+
+    return element;
+  }
+
+  document.body.appendChild(component());
+
+  if(module.hot){
+      module.hot.accept('./print.js',function(){
+          console.log('Accepting the update printMe module!');
+          printMe();
+      })
+  }
