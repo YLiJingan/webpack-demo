@@ -1,0 +1,4 @@
+/*babel配置文件*/
+{
+    "presets":["react","env"]    /*渲染器，同webpack中use的options的配置作用一样*/
+}

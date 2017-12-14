@@ -6,6 +6,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = {
+    devtool: 'source-map',
     entry:{
     index:'./src/index.js',   //配置入口文件，作为构建内部依赖图的开始
     //app:'./src/index.js',
@@ -24,7 +25,8 @@ module.exports = {
                 test:/\.css$/,
                 use:[
                     'style-loader',
-                    'css-loader'
+                    'css-loader',
+                    'postcss-loader'
                 ]
             },
             {
@@ -50,6 +52,15 @@ module.exports = {
                 use:[
                     'xml-loader'
                 ]
+            },{
+                test:/\.(jsx|js)$/,
+                use:{ 
+                    loader:'babel-loader',
+                    options:{
+                        presets:['es2015','react']
+                    }
+                },
+                exclude:/node_modules/
             }
         ]
     },

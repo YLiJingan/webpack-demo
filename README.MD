@@ -47,8 +47,14 @@ webpack.config.js中plugins配置中添加HtmlWebpackPlugin，需要先引入htm
 * `npm install clean-webpack-plugin --save-dev`     
 
 #### 开发
-* 使用source map
-    * 为了更方便的追踪错误和警告，JS提供了source map功能，将编译后的代码映射回原始源代码。这个在Chrome的控制台中可以找到
+* 使用source map(便于打包之后进行调试)
+    * 为了更方便的追踪错误和警告，JS提供了source map功能，将编译后的代码映射回原始源代码。这个在Chrome的控制台中可以找到    
+    **上线之前，需要删除devtool。**
+    webpack.config.js中配置devtool选项,有4中模式：
+        1. source-map:会减慢打包速度，在一个单独文件中产生一个完整其功能完全的文件，会提示第几行的哪里有错误。  打包完成之后，会生成一个.map独立文件
+        2. cheap-module-source-map 也会生成独立的文件，会提示在第几行出现错误，但是不提示具体错误在这一行的哪里   
+        3. eval-source-map 不生成独立的文件，打包速度比较快，有安全问题,会提示第几行的哪里有错误(开发阶段)     
+        4. cheap-module-eval-source-map  不生成独立的文件，会提示在第几行出现错误，但是不提示具体错误在这一行的哪里(开发阶段)
 
 * 开发工具
     * 每次要编译代码的时候，都需要手动运行npm run build 就会变的很麻烦。我们可以使用3中工具在代码发生变化之后进行自动编译         
@@ -109,8 +115,8 @@ webpack.config.js中plugins配置中添加HtmlWebpackPlugin，需要先引入htm
 * 入口文件      
     * 使用entry配置手动地分离代码      
     <img src="http://ow4f5k7el.bkt.clouddn.com/entrySperate.png" width = "450" height = "100" alt="htmlwebpackplugin" align=center />   
-    * 缺点:如果入口chunks之间包含重复法人模块，重复的模块都会被引入到各个bundle中。从上图可以看到，我们在两个文件都引入了lodsh         
-*   防止重复        
+    * 缺点:如果入口chunks之间包含重复法人模块，重复的模块都会被引入到各个bundle中。从上图可以看到，我们在两个文件都引入了lodsh               
+* 防止重复        
     * CommonsChunkPlugin插件可以将公共的依赖模块提取到已有的入口chunk中，或者提取到一个新生成的chunk.        
 
 * 动态导入  
@@ -125,11 +131,33 @@ webpack.config.js中plugins配置中添加HtmlWebpackPlugin，需要先引入htm
 *客户端从服务器请求资源是比较耗费时间的，只额就是为什么浏览器使用一种名问缓存的技术。可以使用命中缓存，以降低网络流量，是网站加载速度更快。但是在我们不熟新版本的时候不更改文件名，浏览器会认为它没有被更新，就会使用缓存版本。但是如何才能获取到新的代码呢？*        
 * 输出文件的文件名  
     * 通过使用output.filename进行**文件名替换**，配置webpack.config.js中output模块，`filename:'[name].[chunkhash].js'`    
-    <img src="http://ow4f5k7el.bkt.clouddn.com/chunkhash.png" width = "350" height = "200" alt="htmlwebpackplugin" align=center /> 
+    <img src="http://ow4f5k7el.bkt.clouddn.com/chunkhash.png" width = "550" height = "220" alt="htmlwebpackplugin" align=center /> 
     <br/>
-    <img src="http://ow4f5k7el.bkt.clouddn.com/hash.png" width = "400" height = "150" alt="htmlwebpackplugin" align=center />
-    * **注意** 开发环境中只能使用[hash]，在生产环境中使用[chunkhash]，不能和热更新同时使用(然而热更新只是在开发环境中使用的)       
-*   提取模板    
+       **注意** 开发环境中只能使用[hash]，在生产环境中使用[chunkhash]，不能和热更新同时使用(然而热更新只是在开发环境中使用的) 
+    <img src="http://ow4f5k7el.bkt.clouddn.com/hash.png" width = "550" height = "230" alt="htmlwebpackplugin" align=center />         
+      
+* 提取模板    
     *使用CommonsChunkPlugin在每次修改后的构建结果中，将webpack的样板和mainfest提取出来。通过指定entry配置中未用到的名称，这个插件会自动将我们需要的内容提取到单独的包中。*     
+
+
+以上内容是对照官网进行的简单练习，知识点比较零散。在实际的开发中，需要结合实际的项目进行相关的配置。
+
+
+#### PostCSS 
+*自动处理CSS3属性前缀*      
+`npm install --save-dev postcss-loader autoprefixer`
+新建 post.config.css配置文件  module模块下的css文件中use增加 postcss-loader    
+执行webpack，在dist文件夹中我们看到CSS3前缀已经自动加上
+[postcss Loader](https://github.com/postcss/postcss-loader)
+
+#### Babel
+转换ES6、转换JSX     
+安装依赖:`npm install --save-dev babel-core babel-loader bebel-preset-es2015 babel-preset-react`  
+webpack.config.js中module中配置增加对js的Loader。也可以在根目录下增加.babelrc配置文件，配置`"presets":["react","es2015"] `        
+执行webpack，在打包好的dist文件夹中可以看到es6,以及react中的jsx语法被转换。       
+
+*转换es6,es7,es8*
+`npm install --save-dev babel-preset-env`
+修改presets 渲染器中的es2015为env
 
 

@@ -8,10 +8,8 @@
 }
 
 
-
-
-
 *{
     color:green;
     font-family:'iconfont';
+    box-sizing: border-box;
 }

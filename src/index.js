@@ -27,10 +27,10 @@ import _ from 'lodash';
     btn.onclick = printMe;
     element.appendChild(btn);
 
-    btn.onclick = e => import(/* webpackChunkName: "print" */ './print').then(module => {
-    var print = module.default;
-            print();
-     });
+    // btn.onclick = e => import(/* webpackChunkName: "print" */ './print').then(module => {
+    // var print = module.default;
+    //         print();
+    //  });
 
     return element;
   }
