@@ -92,7 +92,11 @@ module.exports = {
         }),
         new webpack.optimize.CommonsChunkPlugin({
             name:'common'   //指定公共 bundle的名称
-        })
+        }),
+        new webpack.ProvidePlugin({
+            $:"jquery"
+        }),
+        new webpack.BannerPlugin('Yan')
     ],
     devtool:'inline-source-map',
     devServer:{
@@ -100,4 +104,9 @@ module.exports = {
         hot:true,
         port:9001
     },
+    watchOptions:{
+        poll:1000,   //监视时间，毫秒单位
+        aggregeateTimeout:500,  //防止重复进行保存，打包出错
+        ignored:/node_modules/,
+    }
 };

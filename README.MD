@@ -48,37 +48,37 @@ webpack.config.js中plugins配置中添加HtmlWebpackPlugin，需要先引入htm
 
 #### 开发     
 开发环境和生产环境的依赖不同。     
-package.json dependencies生产依赖  devDependencies开发依赖      
+**package.json dependencies生产依赖  devDependencies开发依赖**        
 安装依赖:npm install xxxx(安装到系统中了,package.json中没有记录)    
-        npm install xxxx --save (保存到本地目录,dependencies生产依赖)  
-        npm install xxxx --save-dev (保存到本地目录,devDependencies开发依赖)
-开发环境和生产环境并行：    
+        npm install xxxx --save (保存到本地目录,dependencies生产依赖)      
+        npm install xxxx --save-dev (保存到本地目录,devDependencies开发依赖)   
+模块化开发(开发环境和生产环境并行：)        
     修改package.json 添加dev npm script，并通过环境变量来进行区分。
             "build": "set type=build&webpack", 生产
             "dev":"set type=dev&webpack",       开发
-    修改webpack.config.js
-        `console.log(encodeURIComponent(process.env.type));
-        if(process.env.type == "build"){
-            var website = {
-                publicePath:'http://192.168.91.1:9001'
-            }
-        }else{
-            var website = {
-                publicePath:'http://www.angryyan.com:9001'
-            }
-        }`
-        端口号是在devServer中进行配置的。
-* 使用source map(便于打包之后进行调试)
-    * 为了更方便的追踪错误和警告，JS提供了source map功能，将编译后的代码映射回原始源代码。这个在Chrome的控制台中可以找到    
-    **上线之前，需要删除devtool。**
-    webpack.config.js中配置devtool选项,有4中模式：
-        1. source-map:会减慢打包速度，在一个单独文件中产生一个完整其功能完全的文件，会提示第几行的哪里有错误。  打包完成之后，会生成一个.map独立文件
-        2. cheap-module-source-map 也会生成独立的文件，会提示在第几行出现错误，但是不提示具体错误在这一行的哪里   
-        3. eval-source-map 不生成独立的文件，打包速度比较快，有安全问题,会提示第几行的哪里有错误(开发阶段)     
-        4. cheap-module-eval-source-map  不生成独立的文件，会提示在第几行出现错误，但是不提示具体错误在这一行的哪里(开发阶段)
+    修改webpack.config.js       
+        `console.log(encodeURIComponent(process.env.type));     
+        if(process.env.type == "build"){      
+            var website = {     
+                publicePath:'http://192.168.91.1:9001'      
+            }   
+        }else{    
+            var website = {     
+                publicePath:'http://www.angryyan.com:9001'      
+            }     
+        }`        
+        端口号是在devServer中进行配置的。       
+*使用source map(便于打包之后进行调试)*
+    为了更方便的追踪错误和警告，JS提供了source map功能，将编译后的代码映射回原始源代码。这个在Chrome的控制台中可以找到    
+    **上线之前，需要删除devtool。**       
+    webpack.config.js中配置devtool选项,有4中模式：      
+        1. source-map:会减慢打包速度，在一个单独文件中产生一个完整其功能完全的文件，会提示第几行的哪里有错误。        打包完成之后，会生成一个.map独立文件      
+        2. cheap-module-source-map 也会生成独立的文件，会提示在第几行出现错误，但是不提示具体错误在这一行的哪里       
+        3. eval-source-map 不生成独立的文件，打包速度比较快，有安全问题,会提示第几行的哪里有错误(开发阶段)          
+        4. cheap-module-eval-source-map  不生成独立的文件，会提示在第几行出现错误，但是不提示具体错误在这一行的哪里(开发阶段)        
 
 * 开发工具
-    * 每次要编译代码的时候，都需要手动运行npm run build 就会变的很麻烦。我们可以使用3中工具在代码发生变化之后进行自动编译         
+    * 每次要编译代码的时候，都需要手动运行npm run build 就会变的很麻烦。我们可以使用中工具在代码发生变化之后进行自动编译         
     **webpack's Watch Mode**  
     **webpack-dev-server**  
     **webpack-dev-middleware**  
@@ -86,7 +86,12 @@ package.json dependencies生产依赖  devDependencies开发依赖
         * package.json中添加用于启动webpack的观察模式的npm script脚本
         * npm run watch执行之后，wenpack会一直观察文件，当发生变化时，自动重新编译。   
         * 缺点：代码是重新编译过的，但是我们要在浏览器中看到最新的代码的话，需要手动进行刷新   
-
+        *  配置webpack.config.js    
+        `watchOptions:{
+              poll:1000,   //监视时间，毫秒单位
+              aggregeateTimeout:500,  //防止重复进行保存，打包出错
+              ignored:/node_modules/,
+          }`      
     * 使用webpack-dev-server
       * webpack-dev-server为你提供了一个简单的web服务器，并且呢能够实时进行重新加载，这也是webpack-dev-server相比观察模式好的地方    
       * `npm install --save-dev webpack-dev-server`     
@@ -161,9 +166,6 @@ package.json dependencies生产依赖  devDependencies开发依赖
     *使用CommonsChunkPlugin在每次修改后的构建结果中，将webpack的样板和mainfest提取出来。通过指定entry配置中未用到的名称，这个插件会自动将我们需要的内容提取到单独的包中。*     
 
 
-以上内容是对照官网进行的简单练习，知识点比较零散。在实际的开发中，需要结合实际的项目进行相关的配置。
-
-
 #### PostCSS 
 *自动处理CSS3属性前缀*      
 `npm install --save-dev postcss-loader autoprefixer`
@@ -177,9 +179,25 @@ package.json dependencies生产依赖  devDependencies开发依赖
 webpack.config.js中module中配置增加对js的Loader。也可以在根目录下增加.babelrc配置文件，配置`"presets":["react","es2015"] `        
 执行webpack，在打包好的dist文件夹中可以看到es6,以及react中的jsx语法被转换。       
 
-*转换es6,es7,es8*
-`npm install --save-dev babel-preset-env`
-修改presets 渲染器中的es2015为env       
+*转换es6,es7,es8*       
+`npm install --save-dev babel-preset-env`       
+修改presets 渲染器中的es2015为env         
+
+#### 打包第三方类库  
+两种方式: 
+1. import  
+   `npm install --save jquery`    
+   `import $ from jquery`          
+2. webpack自带ProvidePlugin插件  
+  webpack.config.js       
+  `const webpack = require('webpack');`     
+  配置plugins `new webpack.ProvidePlugin({
+                $:"jquery"      
+              })`       
+
+
+以上内容是对照官网进行的简单练习，知识点比较零散。在实际的开发中，需要结合实际的项目进行相关的配置。
+
 
 
 

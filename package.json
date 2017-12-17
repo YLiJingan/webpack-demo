@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "set type=build&webpack",
-    "dev":"set type=dev&webpack",
+    "dev": "set type=dev&webpack",
     "watch": "webpack --watch",
     "start": "webpack-dev-server --open",
     "server": "node server.js"
@@ -36,6 +36,7 @@
     "xml-loader": "^1.2.1"
   },
   "dependencies": {
+    "jquery": "^3.2.1",
     "lodash": "^4.17.4"
   }
 }
