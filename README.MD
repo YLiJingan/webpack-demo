@@ -46,7 +46,28 @@ webpack.config.js中plugins配置中添加HtmlWebpackPlugin，需要先引入htm
 在上面的那张图中，可以看到我的dist文件夹现在是相当的杂乱，这还只是个小demo，clean-webpack-plugin是一个比较普及的管理插件。在每次重新构建之前，删除dist文件夹，构建的时候再重新生成。                         
 * `npm install clean-webpack-plugin --save-dev`     
 
-#### 开发
+#### 开发     
+开发环境和生产环境的依赖不同。     
+package.json dependencies生产依赖  devDependencies开发依赖      
+安装依赖:npm install xxxx(安装到系统中了,package.json中没有记录)    
+        npm install xxxx --save (保存到本地目录,dependencies生产依赖)  
+        npm install xxxx --save-dev (保存到本地目录,devDependencies开发依赖)
+开发环境和生产环境并行：    
+    修改package.json 添加dev npm script，并通过环境变量来进行区分。
+            "build": "set type=build&webpack", 生产
+            "dev":"set type=dev&webpack",       开发
+    修改webpack.config.js
+        `console.log(encodeURIComponent(process.env.type));
+        if(process.env.type == "build"){
+            var website = {
+                publicePath:'http://192.168.91.1:9001'
+            }
+        }else{
+            var website = {
+                publicePath:'http://www.angryyan.com:9001'
+            }
+        }`
+        端口号是在devServer中进行配置的。
 * 使用source map(便于打包之后进行调试)
     * 为了更方便的追踪错误和警告，JS提供了source map功能，将编译后的代码映射回原始源代码。这个在Chrome的控制台中可以找到    
     **上线之前，需要删除devtool。**
@@ -158,6 +179,8 @@ webpack.config.js中module中配置增加对js的Loader。也可以在根目录�
 
 *转换es6,es7,es8*
 `npm install --save-dev babel-preset-env`
-修改presets 渲染器中的es2015为env
+修改presets 渲染器中的es2015为env       
+
+
 
 

@@ -5,6 +5,17 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
 
+console.log(encodeURIComponent(process.env.type));
+if(process.env.type == "build"){
+    var website = {
+        publicePath:'http://192.168.91.1:9001'
+    }
+}else{
+    var website = {
+        publicePath:'http://www.angryyan.com:9001'
+    }
+}
+
 module.exports = {
     devtool: 'source-map',
     entry:{
@@ -17,7 +28,7 @@ module.exports = {
         filename:'[name].[hash].js',     //输出的文件名
         //filename:'[name].bundle.js',
         path:path.resolve('./','dist'),     //在哪里输出
-        publicPath:'/'
+        publicPath:website
     },
     module:{
         rules:[
@@ -85,7 +96,8 @@ module.exports = {
     ],
     devtool:'inline-source-map',
     devServer:{
-        contentBase:'./dist',     //告知webpack-dev-server，在localhost：8080下简历服务，并将dist文件夹作为可访问文件
-        hot:true
+        contentBase:'./dist',     //告知webpack-dev-server，在localhost：8080下建立服务，并将dist文件夹作为可访问文件
+        hot:true,
+        port:9001
     },
 };
